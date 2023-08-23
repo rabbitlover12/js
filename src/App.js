@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Second from './pages/second';
 import Third from './pages/third';
+import Five from './pages/five';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
               <Nav.Link href='/'>1</Nav.Link>
               <Nav.Link href='/2'>2</Nav.Link>      
               <Nav.Link href='/3'>3</Nav.Link>
+              <Nav.Link href='/5'>5</Nav.Link>
             </Nav>
           </Container>
         </Navbar>
@@ -26,7 +28,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} /> 
           <Route path="/2" element={<Second />} /> 
-          <Route path="/3" element={<Third />} />         
+          <Route path="/3" element={<Third />} />
+          <Route path="/5" element={<Five />} />        
         </Routes>
       </div>
     </Router>
