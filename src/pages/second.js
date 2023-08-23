@@ -1,8 +1,8 @@
 import React from 'react'
 
-const second = () => {
+function second() {
   return (
-    <div>second</div>
+    <div>박수진</div>
   )
 }
 

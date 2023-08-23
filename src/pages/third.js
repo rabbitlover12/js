@@ -1,8 +1,8 @@
 import React from 'react'
 
-const third = () => {
+function third() {
   return (
-    <div>third</div>
+    <div>전수빈</div>
   )
 }
 
