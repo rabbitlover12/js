@@ -1,0 +1,26 @@
+.banner-text {
+    position: absolute;
+    top: 43%;
+    left: 50%;
+    transform: translate(-50%, -50%);    
+    padding: 33px;
+    font-size: 38px;
+    border-radius: 5px;
+    font-family: 'garam';
+    font-weight: bolder;
+  }
+
+@font-face {
+    font-family: "garam";
+    src: url(../img/garam.ttf);
+}
+
+@font-face {
+    font-family: "son1";
+    src: url(../img/son1.ttf);
+}
+
+@font-face {
+    font-family: "hope";
+    src: url(../img/hope.ttf);
+}
