@@ -15,7 +15,7 @@ const BannerText = () => {
 
   return (
     <div className='banner-text'>
-      어제 나의 플레이리스트는? {currentCategory}
+      어제 나의 플레이리스트는? 도망가자{currentCategory}
     </div>
   );
 };
