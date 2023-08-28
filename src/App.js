@@ -1,25 +1,23 @@
-import React  from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
-import Header from './pages/Header';
-import Footer from './pages/Footer';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
-  
-
   return (
-    <>      
-      <Router>
-        <Header/>
-        <div className='APP'>
+    <Router>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <Header />
+        <div style={{ flex: 1 }}>
           <Routes>
-            <Route path="/" element={<Home />} />          
+            <Route path="/" element={<Home />} />
           </Routes>
         </div>
-        <Footer/>
-      </Router>
-    </>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 

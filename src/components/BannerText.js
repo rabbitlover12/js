@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './BannerText.css';
+import './css/BannerText.css';
 
 const BannerText = () => {
   const categories = ['#우울', '#행복', '#기쁨', '#분노', '#사랑', '#휴식', '#연애', '#일상', '#여행'];
