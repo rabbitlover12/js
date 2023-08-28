@@ -1,6 +1,6 @@
 import React from 'react'
-import banner from '../img/1.gif'
-import BannerText from './BannerText';
+import banner from '../assets/img/1.gif'
+import BannerText from '../components/BannerText';
 
 const Home = () => {
   return (

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import './Header.css';
+import './css/Header.css';
 import { Nav,  Button } from 'react-bootstrap';
-import SignUpModal from '../modal/SignUpModal';
-import SignInModal from '../modal/SignInModal';
+import SignUpModal from './SignUpModal';
+import SignInModal from './SignInModal';
 
 function Header() {
 const [signUpModalShow, setSignUpModalShow] = useState(false);
