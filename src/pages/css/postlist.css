@@ -1,0 +1,157 @@
+
+.App {
+    text-align: center;
+    margin: 20px;
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+  }
+  
+  .search-bar {
+    margin-bottom: 20px;
+  }
+  
+  .search-bar input[type="text"] {
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .search-bar button {
+    padding: 8px 15px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .search-results {
+    margin-bottom: 30px;
+  }
+  
+  .search-results ul {
+    list-style: none;
+    padding: 0;
+    width:40%;
+    margin: 0 auto;
+  }
+  
+  .search-results li {
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .selected-music {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .selected-music h2 {
+    margin-bottom: 10px;
+  }
+  
+  .selected-music iframe {
+    margin-top: 10px;
+  }
+  
+  .create-post-form {
+    margin-bottom: 30px;
+  }
+  
+  .create-post-form input[type="text"],
+  .create-post-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .create-post-form button {
+    padding: 8px 15px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .posts ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+  
+  .posts li {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+  }
+  
+  .posts li:hover {
+    transform: scale(1.02);
+  }
+  
+  .form-input {
+    margin-bottom: 20px;
+  }
+  
+  .form-input label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-input input,
+  .form-input textarea {
+    width: 30%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .form-input textarea {
+    height: 150px;
+  }
+  
+  .card-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    max-width: 1000px; /* 최대 너비 조절 */
+    margin: 0 auto;
+    justify-content: flex-start;
+    
+  }
+  
+  .card {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: calc(20% - 10px); /* 5개를 한 줄에 배치하므로 20%로 설정 */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card img {
+    max-width: 100%;
+    height: auto;
+  }
+  .card h3 {
+    font-size: 16px;
+    line-height: 1.2;
+    height: 3.6em; /* 최대 두 줄 (2줄의 내용이 들어갈 수 있도록 높이 조절) */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    margin: 0;
+  }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './css/Header.css';
 import { Nav,  Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import SignUpModal from './SignUpModal';
 import SignInModal from './SignInModal';
 
@@ -30,7 +31,12 @@ function handleSignInModalClose() {
                 <Nav.Link>
                   <Button variant="secondary" onClick={() => setSignUpModalShow(true)}>Sign Up</Button>
                 </Nav.Link>
-                {/* 로그인 회원가입 버튼 */}
+                {/* 로그인 회원가입 버튼 */}                
+                <Nav.Link>
+                  <Link to="/postlist">
+                    <Button variant="primary">게시판</Button>
+                  </Link>
+                </Nav.Link>        
               </Nav></div>
         
       </nav>
