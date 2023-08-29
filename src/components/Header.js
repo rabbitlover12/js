@@ -23,7 +23,10 @@ function handleSignInModalClose() {
     <SignUpModal show={signUpModalShow} onHide={handleSignUpModalClose} />
     <SignInModal show={signInModalShow} onHide={handleSignInModalClose} />
       <nav>
-        <div className='blog'>노래추천사이트
+        <div className='blog'>
+          <Link to="/" style={{ textDecoration: "none", color: 'black' }}>
+          <span >노래추천사이트</span>
+          </Link>
         <Nav className='ml-auto'>
                 <Nav.Link>
                   <Button variant="primary" onClick={() => setSignInModalShow(true)}>Sign In</Button>
@@ -33,7 +36,7 @@ function handleSignInModalClose() {
                 </Nav.Link>
                 {/* 로그인 회원가입 버튼 */}                
                 <Nav.Link>
-                  <Link to="/postlist">
+                  <Link to="/postlist2">
                     <Button variant="primary">게시판</Button>
                   </Link>
                 </Nav.Link>        

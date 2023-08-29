@@ -34,10 +34,11 @@ connection.connect((err) => {
 //유튜브검색  
   app.get('/search', async (req, res) => {
     try {
-      const response = await axios.get('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=react&type=video&key=AIzaSyB6dqI3f1_rBCjil8rhksEq3p6pEEZF5vc', {
+      const apiKey = process.env.API_KEY;
+      const response = await axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=react&type=video&key=${apiKey}`, {
         params: {
           q: req.query.q,
-          key: 'AIzaSyB6dqI3f1_rBCjil8rhksEq3p6pEEZF5vc',
+          key: apiKey,
           part: 'snippet',
           maxResults: 10,
           type: 'video',
@@ -75,6 +76,25 @@ connection.connect((err) => {
         return;
       }
       res.status(200).json(result);
+    });
+  });
+
+
+  //상세게시글
+  app.get('/getPost/:id', (req, res) => {
+    const postId = req.params.id;
+    const query = 'SELECT * FROM post WHERE id = ?';
+    connection.query(query, [postId], (err, result) => {
+      if (err) {
+        console.error('게시글 조회 오류:', err);
+        res.status(500).send('게시글 조회에 실패했습니다.');
+        return;
+      }
+      if (result.length === 0) {
+        res.status(404).send('게시글을 찾을 수 없습니다.');
+        return;
+      }
+      res.status(200).json(result[0]);
     });
   });
 

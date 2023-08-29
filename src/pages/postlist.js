@@ -81,15 +81,9 @@ function Postlist() {
             onChange={(e) => setNewHeader(e.target.value)}
           />
           </div>
-            <div className='form-input'>
-            <label htmlFor="newHeader">게시글 내용</label>
-            <textarea
-              id="newMain"
-              value={newMain}
-              onChange={(e) => setNewMain(e.target.value)}
-            />
-          </div>
-          <div className='search-bar'>
+            <div className='form-input'>            
+            <div className="search-results">
+            <div className='search-bar'>
         <input
           type="text"
           placeholder="음악 검색어를 입력하세요"
@@ -99,9 +93,7 @@ function Postlist() {
         />
         <button onClick={handleSearch}>검색</button>
       </div>
-
-      <div className="search-results">
-        <h2>검색 결과</h2>
+        <h5>검색 결과</h5>
         <div className="card-list">
           {searchResults.slice(0, 8).map((result) => (
             <div key={result.id.videoId} className="card">
@@ -115,8 +107,9 @@ function Postlist() {
             </div>
           ))}
         </div>
-      </div>  
-        {selectedMusic && (
+        <label htmlFor="newHeader">게시글 내용</label>
+      </div>
+      {selectedMusic && (
           <div className="selected-music">
             <h2>선택된 음악</h2>
             <h3>{selectedMusic.snippet.title}</h3>
@@ -129,34 +122,16 @@ function Postlist() {
               allowFullScreen
             ></iframe>
           </div>
-        )}
+        )}            
+            <textarea
+              id="newMain"
+              value={newMain}
+              onChange={(e) => setNewMain(e.target.value)}
+            />
+          </div> 
         <button onClick={createPost}>게시글 생성</button>
       </div>
-
-      <div className="posts">
-        <h2>게시글 목록</h2>
-        <ul>
-    {posts.map((post, index) => (
-      <li key={index}>
-        <h3>{post.header}</h3>
-        <p>{post.main}</p>
-        {post.musicTitle && (
-          <div className="music-info">
-            <h4>선택된 음악</h4>
-            <p>제목: {post.musicTitle}</p>
-            <iframe
-              width="100%"
-              height="150"
-              src={`https://www.youtube.com/embed/${post.musicVideoId}`}
-              frameBorder="0"
-              allowFullScreen
-            ></iframe>
-          </div>
-        )}
-      </li>
-    ))}
-  </ul>
-      </div>
+     
     </div>
   );
 }
