@@ -40,15 +40,7 @@ function Postlist2() {
                         <h3>{post.header}</h3>
                         {post.musicTitle && (
                         <div className="music-info">
-                            <h4>선택된 음악</h4>
-                            <p>제목: {post.musicTitle}</p>
-                            <iframe
-                            width="100%"
-                            height="150"
-                            src={`https://www.youtube.com/embed/${post.musicVideoId}`}
-                            frameBorder="0"
-                            allowFullScreen
-                            ></iframe>
+                            
                         </div>
                         )}
                         <p>{post.main}</p>
