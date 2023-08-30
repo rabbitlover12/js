@@ -3,11 +3,17 @@ const cors = require("cors");
 const mysql = require("mysql");
 const app = express();
 const PORT = process.env.PORT || 3003;
+const axios = require('axios');
+const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+}));
 app.use(express.json());
+app.use(cookieParser(process.env.COOKIE_SECRET, { sameSite: "none", secure: true }));
 
 const connection = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -16,6 +22,7 @@ const connection = mysql.createConnection({
     database: process.env.DB_DATABASE,
 });
 
+//mysql연결
 connection.connect((err) => {
     if (err) {
       console.error('MySQL 연결 오류:', err);
@@ -23,72 +30,74 @@ connection.connect((err) => {
     }
     console.log('MySQL에 연결되었습니다.');
   });
+   
+//유튜브검색  
+  app.get('/search', async (req, res) => {
+    try {
+      const apiKey = process.env.API_KEY;
+      const response = await axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=react&type=video&key=${apiKey}`, {
+        params: {
+          q: req.query.q,
+          key: apiKey,
+          part: 'snippet',
+          maxResults: 10,
+          type: 'video',
+        },
+      });
+  
+      res.json(response.data);
+    } catch (error) {
+      console.error('YouTube 검색 오류:', error);
+      res.status(500).send('YouTube 검색에 실패했습니다.');
+    }
+  });
 
-  app.post('/api/custom-login', (req, res) => {
-    const { id, pw } = req.body;
-  
-    
-    const query = 'SELECT * FROM users WHERE id = ? AND pw = ?';
-    connection.query(query, [id, pw], (error, results) => {
-      if (error) {
-        console.error('MySQL 오류:', error);
-        res.status(500).json({ success: false, message: '데이터베이스 오류' });
+  //게시글 작성
+  app.post('/createPosts', (req, res) => {
+    const { newHeader, newMain, selectedMusic } = req.body;
+    const query = 'INSERT INTO post (header, main, musicTitle, musicVideoId) VALUES (?, ?, ?, ?)';
+    connection.query(query, [newHeader, newMain, selectedMusic.snippet.title, selectedMusic.id.videoId], (err, result) => {
+      if (err) {
+        console.error('게시글 생성 오류:', err);
+        res.status(500).send('게시글 생성에 실패했습니다.');
         return;
       }
-  
-      if (results.length > 0) {
-        // 로그인 성공
-        res.json({ success: true });
-      } else {
-        // 로그인 실패
-        res.json({ success: false });
-      }
+      res.status(200).send('게시글이 성공적으로 생성되었습니다.');
     });
   });
-  
-  app.get('/api/check-duplicate/:id', (req, res) => {
-    const { id } = req.params;
-  
-    // 해당 아이디가 이미 존재하는지 조회
-    const query = 'SELECT id FROM users WHERE id = ?';
-    connection.query(query, [id], (error, results) => {
-      if (error) {
-        console.error('MySQL 오류:', error);
-        res.json({ exists: false });
+
+  //게시글 조회
+  app.get('/getPosts', (req, res) => {
+    const query = 'SELECT * FROM post';
+    connection.query(query, (err, result) => {
+      if (err) {
+        console.error('게시글 조회 오류:', err);
+        res.status(500).send('게시글 조회에 실패했습니다.');
         return;
       }
-      res.json({ exists: results.length > 0 });
+      res.status(200).json(result);
     });
   });
-  
-  app.post('/api/signup', (req, res) => {
-    const { id, pw } = req.body;
-  
-    
-    const insertQuery = 'INSERT INTO users (id, pw) VALUES (?, ?)';
-    connection.query(insertQuery, [id, pw], (error, results) => {
-      if (error) {
-        console.error('MySQL 오류:', error);
-        res.json({ success: false });
+
+
+  //상세게시글
+  app.get('/getPost/:id', (req, res) => {
+    const postId = req.params.id;
+    const query = 'SELECT * FROM post WHERE id = ?';
+    connection.query(query, [postId], (err, result) => {
+      if (err) {
+        console.error('게시글 조회 오류:', err);
+        res.status(500).send('게시글 조회에 실패했습니다.');
         return;
       }
-      res.json({ success: true });
-    });
-  });
-  
-  app.get('/api/data', (req, res) => {
-    const query = 'SELECT * FROM users';
-    connection.query(query, (error, results) => {
-      if (error) {
-        console.error('MySQL 오류:', error);
-        res.status(500).json({ success: false, message: '데이터베이스 오류' });
+      if (result.length === 0) {
+        res.status(404).send('게시글을 찾을 수 없습니다.');
         return;
       }
-      res.json({ success: true, data: results });
+      res.status(200).json(result[0]);
     });
   });
-  
-  
+
   
   app.listen(PORT, () => {
     console.log(`서버가 ${PORT} 포트에서 시작되었습니다.`);
