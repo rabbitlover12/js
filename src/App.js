@@ -17,8 +17,9 @@ function App() {
             <Route path="/postlist" element={<Postlist />} />
             <Route path="/postlist2" element={<Postlist2 />} />
             <Route path="/postdetail/:id" element={<PostDetail />} />
-          </Routes> 
-          <p>바윙</p>       
+            <p>바잉</p>
+            <p>하잉</p>
+          </Routes>        
         <Footer />      
     </Router>
   );
