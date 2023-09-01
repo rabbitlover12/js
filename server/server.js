@@ -5,6 +5,9 @@ const app = express();
 const PORT = process.env.PORT || 3003;
 const axios = require('axios');
 const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 
 require('dotenv').config();
 
@@ -14,6 +17,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET, { sameSite: "none", secure: true }));
+
 
 const connection = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -31,6 +35,128 @@ connection.connect((err) => {
     console.log('MySQL에 연결되었습니다.');
   });
    
+// 회원가입 요청 처리
+app.post('/api/signup', async (req, res) => {
+  const { id, pw, email, nickname } = req.body;
+  const user = new User(req.body);
+  
+
+  // 비밀번호 해싱
+  bcrypt.hash(pw, saltRounds, (err, hash) => {
+    if (err) {
+      console.error('비밀번호 해싱 오류:', err);
+      res.status(500).json({ success: false, error: '서버 오류' });
+    } else {
+      // 사용자 등록 쿼리 실행
+      const sql = 'INSERT INTO users (id, pw, email, nickname) VALUES (?, ?, ?, ?)';
+      connection.query(sql, [id, hash, email, nickname], (error, results) => {
+        if (error) {
+          console.error('회원가입 오류:', error);
+          res.status(500).json({ success: false, error: '회원가입 오류' });
+        } else {
+          res.status(200).json({ success: true });
+        }
+      });
+    }
+  });
+});
+
+// 아이디 중복 확인 요청 처리
+app.get('/api/check-duplicate/:id', (req, res) => {
+  const { id } = req.params;
+  const sql = 'SELECT COUNT(*) as count FROM users WHERE id = ?';
+  connection.query(sql, [id], (error, results) => {
+    if (error) {
+      console.error('중복 확인 오류:', error);
+      res.status(500).json({ success: false, error: '서버 오류' });
+    } else {
+      const count = results[0].count;
+      res.status(200).json({ exists: count > 0 });
+    }
+  });
+});
+
+app.get('/api/check-nickname-duplicate/:nickname', (req, res) => {
+  const { nickname } = req.params;
+  const sql = 'SELECT COUNT(*) as count FROM users WHERE nickname = ?';
+  connection.query(sql, [nickname], (error, results) => {
+    if (error) {
+      console.error('닉네임 중복 확인 오류:', error);
+      res.status(500).json({ success: false, error: '서버 오류' });
+    } else {
+      const count = results[0].count;
+      res.status(200).json({ exists: count > 0 });
+    }
+  });
+});
+
+
+//로그인 api
+// 로그인 API
+app.post('/api/signin', (req, res) => {
+  const { id, pw } = req.body;
+  
+  //사용자 정보 조회
+
+  const sql = 'SELECT Id, pw FROM users WHERE Id = ?';
+  connection.query(sql,[id], (error, results) => {
+    if (error) {
+      console.error('로그인 오류: ', error);
+      res.status(505).json({ loginSuccess: false, message: '서버오류'});
+    } else {
+      if (results.length === 0) {
+        res.status(401).json({ loginSuccess:false, message:'아이디에 해당하는 유저가 없습니다.'});
+      }else {
+        const storedHash = results[0].pw;
+        bcrypt.compare(pw, storedHash, (err, isMatch) => {
+          if(err) {
+            console.error('비밀번호 비교 오류: ', err);
+            res.status(505).json({ loginSuccess: false, message:'서버오류'});
+            return;
+          }
+
+          if( isMatch ) {
+            res.status(202).json({ loginSuccess: true });
+          } else {
+            res.status(401).json({ loginSuccess: false, message:'비밀번호가 틀렸습니다.'});
+          }
+        });
+      }
+    }
+  });
+
+
+
+  // const sql = 'SELECT id, pw FROM users WHERE id = ?';
+  // connection.query(sql, [id], (error, results) => {
+  //   if (error) {
+  //     console.error('로그인 오류:', error);
+  //     res.status(500).json({ success: false, error: '서버 오류' });
+  //   } else {
+  //     if (results.length === 0) {
+  //       res.status(401).json({ success: false, message: '아이디가 존재하지 않습니다.' });
+  //     } else {
+  //       const storedHash = results[0].pw;
+  //       bcrypt.compare(pw, storedHash, (err, result) => {
+  //         if (err) {
+  //           console.error('Password comparison error: ' + err);
+  //           res.status(500).json({ success: false, error: '서버 오류' });
+  //           return;
+  //         }
+
+  //         if (result) {
+  //           res.status(200).json({ success: true });
+  //         } else {
+  //           res.status(401).json({ success: false, message: '비밀번호가 일치하지 않습니다.' });
+  //         }
+  //       });
+  //     }
+  //   }
+  // });
+});
+
+
+
 //유튜브검색  
   app.get('/search', async (req, res) => {
     try {
@@ -102,3 +228,5 @@ connection.connect((err) => {
   app.listen(PORT, () => {
     console.log(`서버가 ${PORT} 포트에서 시작되었습니다.`);
   });
+
+  
