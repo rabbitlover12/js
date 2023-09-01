@@ -7,6 +7,7 @@ const axios = require('axios');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const jwt = require('jsonwebtoken');
 
 
 require('dotenv').config();
@@ -35,6 +36,9 @@ connection.connect((err) => {
     console.log('MySQL에 연결되었습니다.');
   });
    
+  let isLoggedIn = false; // 로그인 상태 변수 
+
+
 // 회원가입 요청 처리
 app.post('/api/signup', async (req, res) => {
   const { id, pw, email, nickname } = req.body;
@@ -124,35 +128,6 @@ app.post('/api/signin', (req, res) => {
       }
     }
   });
-
-
-
-  // const sql = 'SELECT id, pw FROM users WHERE id = ?';
-  // connection.query(sql, [id], (error, results) => {
-  //   if (error) {
-  //     console.error('로그인 오류:', error);
-  //     res.status(500).json({ success: false, error: '서버 오류' });
-  //   } else {
-  //     if (results.length === 0) {
-  //       res.status(401).json({ success: false, message: '아이디가 존재하지 않습니다.' });
-  //     } else {
-  //       const storedHash = results[0].pw;
-  //       bcrypt.compare(pw, storedHash, (err, result) => {
-  //         if (err) {
-  //           console.error('Password comparison error: ' + err);
-  //           res.status(500).json({ success: false, error: '서버 오류' });
-  //           return;
-  //         }
-
-  //         if (result) {
-  //           res.status(200).json({ success: true });
-  //         } else {
-  //           res.status(401).json({ success: false, message: '비밀번호가 일치하지 않습니다.' });
-  //         }
-  //       });
-  //     }
-  //   }
-  // });
 });
 
 
