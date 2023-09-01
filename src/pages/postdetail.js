@@ -37,7 +37,16 @@ function PostDetail() {
               ></iframe>
             </div>
           )}
-          <p>{post.main}</p>
+          <p>{post.main}</p><h3>댓글</h3>
+          <ul>
+            {post.comments.map((comment, index) => (
+              <li key={index}>
+                <p>{comment.content}</p>
+                <p>작성자: {comment.author}</p>
+                <p>작성일: {comment.date}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       ) : (
         <p>Loading...</p>

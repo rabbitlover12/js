@@ -44,6 +44,7 @@ function Postlist2() {
                         </div>
                         )}
                         <p>{post.main}</p>
+                        <p>댓글 수: {post.comment_count}</p>
                     </div>
                     </Link>
                 </li>
