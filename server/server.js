@@ -171,9 +171,9 @@ app.post('/api/signin', (req, res) => {
 
   //게시글 작성
   app.post('/createPosts', (req, res) => {
-    const { newHeader, newMain, selectedMusic } = req.body;
-    const query = 'INSERT INTO post (header, main, musicTitle, musicVideoId) VALUES (?, ?, ?, ?)';
-    connection.query(query, [newHeader, newMain, selectedMusic.snippet.title, selectedMusic.id.videoId], (err, result) => {
+    const { newHeader, newMain, selectedMusic, author } = req.body;
+    const query = 'INSERT INTO post (header, main, musicTitle, musicVideoId, userId) VALUES (?, ?, ?, ?, ?)';
+    connection.query(query, [newHeader, newMain, selectedMusic.snippet.title, selectedMusic.id.videoId, author], (err, result) => {
       if (err) {
         console.error('게시글 생성 오류:', err);
         res.status(500).send('게시글 생성에 실패했습니다.');
