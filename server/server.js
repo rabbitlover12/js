@@ -42,7 +42,7 @@ connection.connect((err) => {
 // 회원가입 요청 처리
 app.post('/api/signup', async (req, res) => {
   const { id, pw, email, nickname } = req.body;
-  const user = new User(req.body);
+  
   
 
   // 비밀번호 해싱
