@@ -119,10 +119,26 @@ app.post('/api/signin', (req, res) => {
             return;
           }
 
-          if( isMatch ) {
-            res.status(202).json({ loginSuccess: true });
+          if (isMatch) {
+            // 사용자의 ID를 기반으로 닉네임을 가져오는 SQL 쿼리 실행
+            const getUserIdSQL = 'SELECT nickname FROM users WHERE Id = ?';
+            connection.query(getUserIdSQL, [id], (error, userResults) => {
+              if (error) {
+                console.error('닉네임 가져오기 오류: ', error);
+                res.status(505).json({ loginSuccess: false, message: '서버오류' });
+                return;
+              }
+          
+              if (userResults.length === 0) {
+                res.status(401).json({ loginSuccess: false, message: '닉네임을 찾을 수 없습니다.' });
+              } else {
+                const nickname = userResults[0].nickname;
+                res.status(202).json({ loginSuccess: true, nickname });
+                console.log({nickname});
+              }
+            });
           } else {
-            res.status(401).json({ loginSuccess: false, message:'비밀번호가 틀렸습니다.'});
+            res.status(401).json({ loginSuccess: false, message: '비밀번호가 틀렸습니다.' });
           }
         });
       }

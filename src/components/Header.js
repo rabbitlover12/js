@@ -9,6 +9,7 @@ function Header() {
   const [signUpModalShow, setSignUpModalShow] = useState(false);
   const [signInModalShow, setSignInModalShow] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태를 저장하는 상태 변수
+  const nickname = localStorage.getItem('nickname');
 
   useEffect(() => {
     const storedLoggedIn = localStorage.getItem('isLoggedIn');
@@ -29,6 +30,7 @@ function Header() {
 
   function handleSignOut() {
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('nickname');
     setIsLoggedIn(false);
   }
 
@@ -52,6 +54,7 @@ function Header() {
             {isLoggedIn ? (
               <Nav.Link>
                 <Button variant="primary" onClick={() => handleSignOut()}>Sign Out</Button>
+                <h1>{nickname}님 환영합니다!</h1>
               </Nav.Link>
             ) : (
               <>

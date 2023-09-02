@@ -29,12 +29,14 @@ const SignInModal = ({ show, onHide }) => {
 
     axios
       .post('http://localhost:3003/api/signin', { id, pw: password })
-      .then((response) => {
+      .then((response) => {        
         const data = response.data;
         if (data.loginSuccess) {
+          console.log(response.data)
           localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('nickname', data.nickname);
           onHide();
-
+          
           // 로그인 성공 후의 동작 추가 (예: 다른 페이지로 이동)
            // 예시: 로그인 후 프로필 페이지로 이동
         } else {
