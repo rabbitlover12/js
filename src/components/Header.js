@@ -53,7 +53,7 @@ function Header() {
           <Nav className='ml-auto'>
             {isLoggedIn ? (
               <Nav.Link>
-                <Button variant="primary" onClick={() => handleSignOut()}>Sign Out</Button>
+                <Button className="signoutbutton" variant="primary" onClick={() => handleSignOut()}>Sign Out</Button>
                 <h1>{nickname}님 환영합니다!</h1>
               </Nav.Link>
             ) : (
@@ -68,7 +68,9 @@ function Header() {
             )}
             <Nav.Link>
               <Link to="/postlist2">
-                <Button variant="primary">게시판</Button>
+              <Button className="custombutton" variant="primary">
+               게시판
+              </Button>
               </Link>
             </Nav.Link>
           </Nav>
