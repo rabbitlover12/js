@@ -68,9 +68,8 @@ function Postlist() {
 
   return (
     <div>
-      <h1>게시판 실험</h1>
       <div className='create-post-form'>
-      <h2>게시글 작성</h2>
+      <h2>게시판</h2>
           <div className='form-input'>
             <label htmlFor="newHeader">게시글 제목</label>
             <input
@@ -107,7 +106,7 @@ function Postlist() {
             </div>
           ))}
         </div>
-        <label htmlFor="newHeader">게시글 내용</label>
+        {/* <label htmlFor="newHeader">게시글 내용</label> */}
       </div>
       {selectedMusic && (
           <div className="selected-music">

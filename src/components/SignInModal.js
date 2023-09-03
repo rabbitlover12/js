@@ -7,7 +7,7 @@ const SignInModal = ({ show, onHide }) => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [nickname, setNickName] = useState('');
+  const [nickname, setNickName] = useState(''); 
 
   
 

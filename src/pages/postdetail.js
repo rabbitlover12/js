@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './css/postlist.css';
+import './css/postdetail.css';
 import { useParams } from 'react-router-dom';
 
 function PostDetail() {

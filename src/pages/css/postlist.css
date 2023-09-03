@@ -7,9 +7,9 @@
   h1 {
     margin-bottom: 20px;
   }
-  
+  /* placeholder */
   .search-bar {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
   
   .search-bar input[type="text"] {
@@ -63,6 +63,7 @@
   
   .create-post-form {
     margin-bottom: 30px;
+    margin-left: 50px;
   }
   
   .create-post-form input[type="text"],
