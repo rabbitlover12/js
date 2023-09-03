@@ -3,8 +3,11 @@ import axios from 'axios';
 import './css/postlist2.css';
 import { Button } from 'react-bootstrap';
 
+
 function Postlist2() {
   const [posts, setPosts] = useState([]);
+  const [searchPost, setSearchPost] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
     fetchPosts();
@@ -18,6 +21,18 @@ function Postlist2() {
       console.error('게시글 조회 오류:', error);
     }
   };
+
+
+
+//검색기능(?) 임시
+  const handleSearchPost = () => {
+  const filteredPosts = posts.filter((post) =>
+    post.header.toLowerCase().includes(searchPost.toLowerCase())
+  );
+  setPosts(filteredPosts);
+};
+
+
   const handleWriteClick = () => {
     const isLoggedIn = localStorage.getItem('isLoggedIn');
     if (isLoggedIn === 'true') {
@@ -44,6 +59,17 @@ function Postlist2() {
       <Button variant="primary" onClick={handleWriteClick}>
         글쓰기
       </Button>
+        <div className="search">
+          <input
+          type="text"
+          placeholder="검색어를 입력하세요"
+          style={{ width: '300px' }}
+          value={searchPost}
+          onChange={(e) => setSearchPost(e.target.value)} // onChange 핸들러 사용
+          />
+        <Button variant="primary" onClick={handleSearchPost}>검색</Button>
+        </div>
+        
       <ul style={{margin : '30px'}}>
         {posts.map((post, index) => (
           <li key={index} className="post-card-link">
