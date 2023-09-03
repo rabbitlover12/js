@@ -24,6 +24,7 @@ function PostDetail() {
       {post ? (
         <div>
           <h2>{post.header}</h2>
+          <h3>작성자:{post.userId}</h3>
           {post.musicTitle && (
             <div className="music-info">
               <h4>선택된 음악</h4>

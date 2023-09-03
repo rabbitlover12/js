@@ -9,6 +9,8 @@ function Postlist() {
   const [posts, setPosts] = useState([]);
   const [newHeader, setNewHeader] = useState('');
   const [newMain, setNewMain] = useState('');
+  
+  
 
   useEffect(() => {
     fetchPosts();
@@ -39,13 +41,16 @@ function Postlist() {
 
   const createPost = async () => {
     try {
-      if (selectedMusic && newHeader && newMain) {
+      const userId = localStorage.getItem('nickname');
+      if (selectedMusic && newHeader && newMain && userId) {
         const response = await axios.post(
           'http://localhost:3003/createPosts',
           {
             newHeader: newHeader,
             newMain: newMain,
             selectedMusic: selectedMusic, 
+            author: userId,
+            
           },
           {
             withCredentials: true,
