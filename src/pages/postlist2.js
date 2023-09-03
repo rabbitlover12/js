@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './css/postlist.css';
+import './css/postlist2.css';
 import { Button } from 'react-bootstrap';
 
 function Postlist2() {
@@ -40,20 +40,19 @@ function Postlist2() {
 
   return (
     <div className="posts">
-      <h2>게시글 목록</h2>
+      <h2>전체 게시글</h2>
       <Button variant="primary" onClick={handleWriteClick}>
         글쓰기
       </Button>
-      <ul>
+      <ul style={{margin : '30px'}}>
         {posts.map((post, index) => (
           <li key={index} className="post-card-link">
             <div onClick={() => handleWriteClick2(post.id)} style={{ textDecoration: 'none', color: 'black' }}>
               <div>
                 <h3>{post.header}</h3>
-                <h3>작성자: {post.userId}</h3>
+                <p>닉네임: {post.userId}</p>
                 {post.musicTitle && (
                   <div className="music-info">
-                    <h4>선택된 음악</h4>
                     <p>제목: {post.musicTitle}</p>
                     <iframe
                       width="100%"

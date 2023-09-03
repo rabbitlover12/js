@@ -24,14 +24,13 @@ function PostDetail() {
       {post ? (
         <div>
           <h2>{post.header}</h2>
-          <h3>작성자:{post.userId}</h3>
+          <p>작성자:{post.userId}</p>
           {post.musicTitle && (
             <div className="music-info">
-              <h4>선택된 음악</h4>
               <p>제목: {post.musicTitle}</p>
               <iframe
-                width="100%"
-                height="315"
+                width="35%"
+                height="450"
                 src={`https://www.youtube.com/embed/${post.musicVideoId}`}
                 frameBorder="0"
                 allowFullScreen
