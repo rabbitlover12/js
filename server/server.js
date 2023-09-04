@@ -183,18 +183,23 @@ app.post('/api/signin', (req, res) => {
     });
   });
 
-  //게시글 조회
-  app.get('/getPosts', (req, res) => {
-    const query = 'SELECT * FROM post';
-    connection.query(query, (err, result) => {
-      if (err) {
-        console.error('게시글 조회 오류:', err);
-        res.status(500).send('게시글 조회에 실패했습니다.');
-        return;
-      }
-      res.status(200).json(result);
-    });
+// 게시글 목록 및 댓글 수 조회
+app.get('/getPosts', (req, res) => {
+  const query = `
+    SELECT 
+      post.*, 
+      (SELECT COUNT(*) FROM comment WHERE post_id = post.id) AS comment_count
+    FROM post`;
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.error('게시글 조회 오류:', err);
+      res.status(500).send('게시글 조회에 실패했습니다.');
+      return;
+    }
+    res.status(200).json(result);
   });
+});
+
 
 
   //상세게시글
@@ -212,6 +217,39 @@ app.post('/api/signin', (req, res) => {
         return;
       }
       res.status(200).json(result[0]);
+    });
+  });
+
+  //댓글?
+  app.post('/createComment', (req, res) => {
+    const { postId, content, author } = req.body;
+    const query = 'INSERT INTO comment (post_id, content, author) VALUES (?, ?, ?)';
+    
+    connection.query(query, [postId, content, author], (err, result) => {
+      if (err) {
+        console.error('댓글 생성 오류:', err);
+        res.status(500).send('댓글 생성에 실패했습니다.');
+        return;
+      }
+      
+      
+      const commentId = result.insertId;
+  
+     
+      res.status(200).send(`댓글이 성공적으로 생성되었습니다. (comment_id: ${commentId})`);
+    });
+  });
+
+  app.get('/getComments/:postId', (req, res) => {
+    const postId = req.params.postId;
+    const query = 'SELECT * FROM comment WHERE post_id = ?';
+    connection.query(query, [postId], (err, result) => {
+      if (err) {
+        console.error('댓글 조회 오류:', err);
+        res.status(500).send('댓글 조회에 실패했습니다.');
+        return;
+      }
+      res.status(200).json(result);
     });
   });
 

@@ -7,7 +7,7 @@ import { Button } from 'react-bootstrap';
 function Postlist2() {
   const [posts, setPosts] = useState([]);
   const [searchPost, setSearchPost] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  
 
   useEffect(() => {
     fetchPosts();
@@ -90,6 +90,7 @@ function Postlist2() {
                   </div>
                 )}
                 <p>{post.main}</p>
+                <p>댓글 수: {post.comment_count}</p>
               </div>
             </div>
           </li>
