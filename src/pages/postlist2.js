@@ -70,14 +70,14 @@ function Postlist2() {
         <Button variant="primary" onClick={handleSearchPost}>검색</Button>
         </div>
         
-      <ul style={{margin : '30px'}}>
+      <ul>
         {posts.map((post, index) => (
           <li key={index} className="post-card-link">
             <div onClick={() => handleWriteClick2(post.id)} style={{ textDecoration: 'none', color: 'black' }}>
               <div>
                 <h3>{post.header}</h3>
                 <p>닉네임: {post.userId}</p>
-                {post.musicTitle && (
+                {/* {post.musicTitle && (
                   <div className="music-info">
                     <p>제목: {post.musicTitle}</p>
                     <iframe
@@ -88,7 +88,7 @@ function Postlist2() {
                       allowFullScreen
                     ></iframe>
                   </div>
-                )}
+                )} */}
                 <p>{post.main}</p>
               </div>
             </div>

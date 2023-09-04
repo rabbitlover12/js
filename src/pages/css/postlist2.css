@@ -9,6 +9,11 @@
   }
 }
 
+.posts{
+  margin: 30px;
+  
+}
+
 .post-card-link {
   animation: smoothAppear 0.5s  ease-in-out;
   animation-fill-mode: forwards;
@@ -19,13 +24,13 @@
   animation-delay: 0.5s;
   display: flex;
   flex-direction: column;
-  align-items: center;
   cursor: pointer;
+  margin-top: 20px;
 }
 
 .search {
   float:right;
-  margin-right:20%;
+  margin-right:5%;
   
   
 }
