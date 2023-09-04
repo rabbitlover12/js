@@ -84,7 +84,6 @@ function Postlist2() {
                       width="100%"
                       height="150"
                       src={`https://www.youtube.com/embed/${post.musicVideoId}`}
-                      frameBorder="0"
                       allowFullScreen
                     ></iframe>
                   </div>
