@@ -18,8 +18,7 @@ function PostDetail() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
-  const [commentContent, setCommentContent] = useState('');
-  const [commentAuthor, setCommentAuthor] = useState('');
+  const [commentContent, setCommentContent] = useState('');  
   const nickname = localStorage.getItem('nickname');
 
   useEffect(() => {
@@ -45,9 +44,7 @@ function PostDetail() {
     setCommentContent(event.target.value);
   };
 
-  const handleCommentAuthorChange = (event) => {
-    setCommentAuthor(event.target.value);
-  };
+  
 
   const handleSubmitComment = async (event) => {
     event.preventDefault();
@@ -124,7 +121,7 @@ function PostDetail() {
           <label htmlFor="content">댓글 내용:</label>
           <textarea id="content" name="content" value={commentContent} onChange={handleCommentContentChange} />
         </div>        
-        <Button variant="primary">댓글 작성</Button>
+        <Button variant="primary" onClick={handleSubmitComment}>댓글 작성</Button>
       </form>
       </div>
     </div>
