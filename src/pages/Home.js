@@ -4,8 +4,8 @@ import BannerText from '../components/BannerText';
 
 const Home = () => {
   return (
-    <div style={{height:'5000px'}}>
-      < img src={banner} alt='배너' style={{display:'block', margin:'0px auto'}} />
+    <div >
+      < img src={banner} alt='배너' style={{display:'block', margin:'0px auto', maxHeight:'80vh'}} />
       <BannerText />
     </div>
   )
