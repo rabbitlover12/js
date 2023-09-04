@@ -8,6 +8,7 @@ import Postlist from './pages/postlist';
 import Postlist2 from './pages/postlist2';
 import PostDetail from './pages/postdetail';
 
+
 function App() {
   return (
     <Router>      

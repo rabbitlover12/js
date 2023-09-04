@@ -5,6 +5,10 @@ const app = express();
 const PORT = process.env.PORT || 3003;
 const axios = require('axios');
 const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+const jwt = require('jsonwebtoken');
+
 
 require('dotenv').config();
 
@@ -14,6 +18,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET, { sameSite: "none", secure: true }));
+
 
 const connection = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -31,6 +36,118 @@ connection.connect((err) => {
     console.log('MySQL에 연결되었습니다.');
   });
    
+  let isLoggedIn = false; // 로그인 상태 변수 
+
+
+// 회원가입 요청 처리
+app.post('/api/signup', async (req, res) => {
+  const { id, pw, email, nickname } = req.body;
+  
+  
+
+  // 비밀번호 해싱
+  bcrypt.hash(pw, saltRounds, (err, hash) => {
+    if (err) {
+      console.error('비밀번호 해싱 오류:', err);
+      res.status(500).json({ success: false, error: '서버 오류' });
+    } else {
+      // 사용자 등록 쿼리 실행
+      const sql = 'INSERT INTO users (id, pw, email, nickname) VALUES (?, ?, ?, ?)';
+      connection.query(sql, [id, hash, email, nickname], (error, results) => {
+        if (error) {
+          console.error('회원가입 오류:', error);
+          res.status(500).json({ success: false, error: '회원가입 오류' });
+        } else {
+          res.status(200).json({ success: true });
+        }
+      });
+    }
+  });
+});
+
+// 아이디 중복 확인 요청 처리
+app.get('/api/check-duplicate/:id', (req, res) => {
+  const { id } = req.params;
+  const sql = 'SELECT COUNT(*) as count FROM users WHERE id = ?';
+  connection.query(sql, [id], (error, results) => {
+    if (error) {
+      console.error('중복 확인 오류:', error);
+      res.status(500).json({ success: false, error: '서버 오류' });
+    } else {
+      const count = results[0].count;
+      res.status(200).json({ exists: count > 0 });
+    }
+  });
+});
+
+app.get('/api/check-nickname-duplicate/:nickname', (req, res) => {
+  const { nickname } = req.params;
+  const sql = 'SELECT COUNT(*) as count FROM users WHERE nickname = ?';
+  connection.query(sql, [nickname], (error, results) => {
+    if (error) {
+      console.error('닉네임 중복 확인 오류:', error);
+      res.status(500).json({ success: false, error: '서버 오류' });
+    } else {
+      const count = results[0].count;
+      res.status(200).json({ exists: count > 0 });
+    }
+  });
+});
+
+
+//로그인 api
+// 로그인 API
+app.post('/api/signin', (req, res) => {
+  const { id, pw } = req.body;
+  
+  //사용자 정보 조회
+
+  const sql = 'SELECT Id, pw FROM users WHERE Id = ?';
+  connection.query(sql,[id], (error, results) => {
+    if (error) {
+      console.error('로그인 오류: ', error);
+      res.status(505).json({ loginSuccess: false, message: '서버오류'});
+    } else {
+      if (results.length === 0) {
+        res.status(401).json({ loginSuccess:false, message:'아이디에 해당하는 유저가 없습니다.'});
+      }else {
+        const storedHash = results[0].pw;
+        bcrypt.compare(pw, storedHash, (err, isMatch) => {
+          if(err) {
+            console.error('비밀번호 비교 오류: ', err);
+            res.status(505).json({ loginSuccess: false, message:'서버오류'});
+            return;
+          }
+
+          if (isMatch) {
+            // 사용자의 ID를 기반으로 닉네임을 가져오는 SQL 쿼리 실행
+            const getUserIdSQL = 'SELECT nickname FROM users WHERE Id = ?';
+            connection.query(getUserIdSQL, [id], (error, userResults) => {
+              if (error) {
+                console.error('닉네임 가져오기 오류: ', error);
+                res.status(505).json({ loginSuccess: false, message: '서버오류' });
+                return;
+              }
+          
+              if (userResults.length === 0) {
+                res.status(401).json({ loginSuccess: false, message: '닉네임을 찾을 수 없습니다.' });
+              } else {
+                const nickname = userResults[0].nickname;
+                res.status(202).json({ loginSuccess: true, nickname });
+                console.log({nickname});
+              }
+            });
+          } else {
+            res.status(401).json({ loginSuccess: false, message: '비밀번호가 틀렸습니다.' });
+          }
+        });
+      }
+    }
+  });
+});
+
+
+
 //유튜브검색  
   app.get('/search', async (req, res) => {
     try {
@@ -54,9 +171,9 @@ connection.connect((err) => {
 
   //게시글 작성
   app.post('/createPosts', (req, res) => {
-    const { newHeader, newMain, selectedMusic } = req.body;
-    const query = 'INSERT INTO post (header, main, musicTitle, musicVideoId) VALUES (?, ?, ?, ?)';
-    connection.query(query, [newHeader, newMain, selectedMusic.snippet.title, selectedMusic.id.videoId], (err, result) => {
+    const { newHeader, newMain, selectedMusic, author } = req.body;
+    const query = 'INSERT INTO post (header, main, musicTitle, musicVideoId, userId) VALUES (?, ?, ?, ?, ?)';
+    connection.query(query, [newHeader, newMain, selectedMusic.snippet.title, selectedMusic.id.videoId, author], (err, result) => {
       if (err) {
         console.error('게시글 생성 오류:', err);
         res.status(500).send('게시글 생성에 실패했습니다.');
@@ -66,18 +183,23 @@ connection.connect((err) => {
     });
   });
 
-  //게시글 조회
-  app.get('/getPosts', (req, res) => {
-    const query = 'SELECT * FROM post';
-    connection.query(query, (err, result) => {
-      if (err) {
-        console.error('게시글 조회 오류:', err);
-        res.status(500).send('게시글 조회에 실패했습니다.');
-        return;
-      }
-      res.status(200).json(result);
-    });
+// 게시글 목록 및 댓글 수 조회
+app.get('/getPosts', (req, res) => {
+  const query = `
+    SELECT 
+      post.*, 
+      (SELECT COUNT(*) FROM comment WHERE post_id = post.id) AS comment_count
+    FROM post`;
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.error('게시글 조회 오류:', err);
+      res.status(500).send('게시글 조회에 실패했습니다.');
+      return;
+    }
+    res.status(200).json(result);
   });
+});
+
 
 
   //상세게시글
@@ -98,7 +220,42 @@ connection.connect((err) => {
     });
   });
 
+  //댓글?
+  app.post('/createComment', (req, res) => {
+    const { postId, content, author } = req.body;
+    const query = 'INSERT INTO comment (post_id, content, author) VALUES (?, ?, ?)';
+    
+    connection.query(query, [postId, content, author], (err, result) => {
+      if (err) {
+        console.error('댓글 생성 오류:', err);
+        res.status(500).send('댓글 생성에 실패했습니다.');
+        return;
+      }
+      
+      
+      const commentId = result.insertId;
+  
+     
+      res.status(200).send(`댓글이 성공적으로 생성되었습니다. (comment_id: ${commentId})`);
+    });
+  });
+
+  app.get('/getComments/:postId', (req, res) => {
+    const postId = req.params.postId;
+    const query = 'SELECT * FROM comment WHERE post_id = ?';
+    connection.query(query, [postId], (err, result) => {
+      if (err) {
+        console.error('댓글 조회 오류:', err);
+        res.status(500).send('댓글 조회에 실패했습니다.');
+        return;
+      }
+      res.status(200).json(result);
+    });
+  });
+
   
   app.listen(PORT, () => {
     console.log(`서버가 ${PORT} 포트에서 시작되었습니다.`);
   });
+
+  
