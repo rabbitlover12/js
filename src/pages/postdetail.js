@@ -10,7 +10,7 @@ async function fetchComments(postId) {
     return response.data;
   } catch (error) {
     console.error('코멘트 조회 오류:', error);
-    return []; // 오류 발생 시 빈 배열을 반환하거나 다른 기본값을 사용할 수 있음
+    return [];
   }
 }
 
@@ -18,7 +18,7 @@ function PostDetail() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
-  const [commentContent, setCommentContent] = useState('');  
+  const [commentContent, setCommentContent] = useState('');
   const nickname = localStorage.getItem('nickname');
 
   useEffect(() => {
@@ -44,34 +44,29 @@ function PostDetail() {
     setCommentContent(event.target.value);
   };
 
-  
-
   const handleSubmitComment = async (event) => {
     event.preventDefault();
-  
+
     const shouldCreateComment = window.confirm('댓글을 작성하시겠습니까?');
-  
+
     if (shouldCreateComment) {
       try {
         const response = await axios.post('http://localhost:3003/createComment', {
-          postId: id, // 현재 게시글의 ID
+          postId: id,
           content: commentContent,
-          author: nickname, // 닉네임 사용
+          author: nickname,
         });
-  
-        // 댓글 생성 성공 시, 서버로부터 받은 응답을 처리할 수 있음
+
         console.log('댓글 생성 성공:', response.data);
-  
-        // 댓글 생성 후, 입력 필드 초기화
+
+        // 댓글 목록을 업데이트하는 함수 호출 등의 추가 로직을 넣으세요.
+        
+        // 댓글 내용을 초기화합니다.
         setCommentContent('');
-  
-        // 댓글 목록을 업데이트할 수 있는 함수를 호출
-        // 예: fetchPostComments();
       } catch (error) {
         console.error('댓글 생성 오류:', error);
       }
     } else {
-      // 사용자가 "취소"를 선택한 경우
       console.log('댓글 작성이 취소되었습니다.');
     }
   };
@@ -81,7 +76,7 @@ function PostDetail() {
       {post ? (
         <div>
           <h2>{post.header}</h2>
-          <p>작성자:{post.userId}</p>
+          {post.userId && <p>작성자: {post.userId}</p>}
           {post.musicTitle && (
             <div className="music-info">
               <p>제목: {post.musicTitle}</p>
@@ -94,35 +89,38 @@ function PostDetail() {
             </div>
           )}
           <p>{post.main}</p>
-          <div className="createcomment">
-          <h3>댓글</h3>
-          <ul>
-            {comments.length > 0 ? (
-              comments.map((comment, index) => (
-                <li key={index}>                  
-                  <p>{comment.author} : {comment.content}</p>
-                  {/* <p>작성일: {comment.created_at}</p> */}
-                </li>
-              ))
-            ) : (
-              <li>No comments available.</li>
-            )}
-          </ul>
-          </div>
         </div>
       ) : (
         <p>Loading...</p>
       )}
+  
+      <div className="comment-section">
+        <h3>댓글</h3>
+        <ul className="commentlist">
+          {comments.length > 0 ? (
+            comments.map((comment, index) => (
+              <li key={index}>
+                <p>{comment.author} : {comment.content}</p>
+              </li>
+            ))
+          ) : (
+            <li>No comments available.</li>
+          )}
+        </ul>
 
-      {/* 댓글 생성 폼 */}
-      <div className='commentlist'>
-      <form onSubmit={handleSubmitComment}>
-        <div>
-          <label htmlFor="content">댓글 내용:</label>
-          <textarea id="content" name="content" value={commentContent} onChange={handleCommentContentChange} />
-        </div>        
-        <Button variant="primary" onClick={handleSubmitComment}>댓글 작성</Button>
-      </form>
+        <form onSubmit={handleSubmitComment}>
+          <div>
+            <label htmlFor="content">댓글 내용:</label>
+            <textarea
+              id="content"
+              name="content"
+              value={commentContent}
+              onChange={handleCommentContentChange}
+              style={{ width: '100%', marginBottom: '10px' }}
+            />
+            <Button variant="primary" onClick={handleSubmitComment}>댓글 작성</Button>
+          </div>
+        </form>
       </div>
     </div>
   );

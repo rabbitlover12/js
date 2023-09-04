@@ -1,13 +1,28 @@
-.post-detail{
-  width: 100%;
-  margin: auto;
-  margin-left: 30px;
+/* postdetail.css */
+
+.comment-section {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #a7d4f2;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
-.createcomment{
-
+.commentlist {
+  list-style: none;
+  padding: 0;
 }
 
-.commentlist{
-  
+.commentlist li {
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #ffff;
+}
+
+
+.comment-form textarea {
+  height: 100px;
+  width: 400%;
 }
