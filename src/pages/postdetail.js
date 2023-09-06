@@ -60,7 +60,7 @@ function PostDetail() {
         console.log('댓글 생성 성공:', response.data);
 
         // 댓글 목록을 업데이트하는 함수 호출 등의 추가 로직을 넣으세요.
-        
+
         // 댓글 내용을 초기화합니다.
         setCommentContent('');
       } catch (error) {
@@ -73,38 +73,48 @@ function PostDetail() {
 
   return (
     <div className="post-detail">
-     {post ? (
-    <div>
-    <h2>{post.header}</h2>
-    {post.userId && <p>작성자: {post.userId}</p>}
-    {post.musicTitle && (
-    <div className="music-info">
-    <p>제목: {post.musicTitle}</p>
-    <iframe
-      width="35%"
-      height="450"
-      src={`https://www.youtube.com/embed/${post.musicVideoId}`}
-      allowFullScreen
-    ></iframe>
-  </div>
-)}
-    {/* 게시글 내용을 가운데 정렬하는 부분 */}
-    <div className="post-content">
-      <p>{post.main}</p>
-    </div>
-    {/* 게시글 내용을 가운데 정렬하는 부분 끝 */}
-  </div>
-) : (
-  <p>Loading...</p>
-)}
-  
+      {post ? (
+        <div>
+          <h2>{post.header}</h2>
+          {post.userId && <p>작성자: {post.userId}</p>}
+
+          {/* 게시글 내용을 박스로 감싸는 부분 */}
+          <div className="contents-box">
+            {/* 유튜브 영상 추가 */}
+            {post.musicTitle && (
+              <div className="music-info">
+                <iframe
+                  width="560"
+                  height="315"
+                  src={`https://www.youtube.com/embed/${post.musicVideoId}`}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            )}
+
+            {/* 게시글 내용 추가 */}
+            <div className="post-content-box">
+              <p>{post.main}</p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
+
+      <hr className="divider" />
+
       <div className="comment-section">
         <h3>댓글</h3>
         <ul className="commentlist">
           {comments.length > 0 ? (
             comments.map((comment, index) => (
               <li key={index}>
-                <p>{comment.author} : {comment.content}</p>
+                <p>
+                  {comment.author} : {comment.content}
+                </p>
               </li>
             ))
           ) : (
@@ -122,7 +132,9 @@ function PostDetail() {
               onChange={handleCommentContentChange}
               style={{ width: '100%', marginBottom: '10px' }}
             />
-            <Button variant="primary" onClick={handleSubmitComment}>댓글 작성</Button>
+            <Button variant="primary" onClick={handleSubmitComment}>
+              댓글 작성
+            </Button>
           </div>
         </form>
       </div>
