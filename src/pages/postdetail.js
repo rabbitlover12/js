@@ -73,26 +73,30 @@ function PostDetail() {
 
   return (
     <div className="post-detail">
-      {post ? (
-        <div>
-          <h2>{post.header}</h2>
-          {post.userId && <p>작성자: {post.userId}</p>}
-          {post.musicTitle && (
-            <div className="music-info">
-              <p>제목: {post.musicTitle}</p>
-              <iframe
-                width="35%"
-                height="450"
-                src={`https://www.youtube.com/embed/${post.musicVideoId}`}
-                allowFullScreen
-              ></iframe>
-            </div>
-          )}
-          <p>{post.main}</p>
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+     {post ? (
+    <div>
+    <h2>{post.header}</h2>
+    {post.userId && <p>작성자: {post.userId}</p>}
+    {post.musicTitle && (
+    <div className="music-info">
+    <p>제목: {post.musicTitle}</p>
+    <iframe
+      width="35%"
+      height="450"
+      src={`https://www.youtube.com/embed/${post.musicVideoId}`}
+      allowFullScreen
+    ></iframe>
+  </div>
+)}
+    {/* 게시글 내용을 가운데 정렬하는 부분 */}
+    <div className="post-content">
+      <p>{post.main}</p>
+    </div>
+    {/* 게시글 내용을 가운데 정렬하는 부분 끝 */}
+  </div>
+) : (
+  <p>Loading...</p>
+)}
   
       <div className="comment-section">
         <h3>댓글</h3>

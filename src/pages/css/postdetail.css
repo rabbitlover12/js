@@ -25,3 +25,21 @@
   height: 100px;
   width: 400%;
 }
+
+.post-content {
+  text-align: center; 
+  margin: 0 auto; 
+  max-width: 600px; 
+}
+
+
+.post-content img {
+  max-width: 100%; 
+  height: auto; 
+}
+
+.music-info {
+  text-align: center;
+  margin: 0 auto;
+  max-width: 100%;
+}
