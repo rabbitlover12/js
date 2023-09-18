@@ -24,5 +24,5 @@
   <img src="https://img.shields.io/badge/mysql-4479A1?style=flat&logo=mysql&logoColor=white"/>
   <img src="https://img.shields.io/badge/css3-1572B6?style=flat&logo=css3&logoColor=white"/>
 
-  -React, jsvascript, MySQL, CSS3
+ 
 
